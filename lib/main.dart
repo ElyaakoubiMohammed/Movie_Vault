@@ -8,7 +8,68 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginScreen(), // Show the login screen initially
+      home: SplashScreen(), // Show the splash screen initially
+    );
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Delay duration for the splash screen
+    const splashDuration = Duration(seconds: 5);
+
+    // Function to navigate to the LoginScreen after splashDuration
+    Future<void> navigateToLogin(BuildContext context) async {
+      await Future.delayed(splashDuration);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    }
+
+    // Call navigateToLogin on build
+    WidgetsBinding.instance.addPostFrameCallback((_) => navigateToLogin(context));
+
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [Colors.purpleAccent, Colors.blueAccent],
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TweenAnimationBuilder(
+                tween: Tween<double>(begin: 0, end: 1),
+                duration: splashDuration,
+                builder: (_, double value, __) {
+                  return Transform.rotate(
+                    angle: value * 6.3, // Full rotation (2π radians)
+                    child: Image.asset(
+                      'lib/logo.png', // Replace with your image path
+                      height: 100, // Adjust size as needed
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 20), // Adjust spacing as needed
+              Text(
+                'NFC',
+                style: TextStyle(
+                  fontSize: 40.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -185,6 +246,17 @@ class MainMenuScreen extends StatelessWidget {
               },
               child: Text('Erase Tag'),
             ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to Erase Tag screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EraseTagScreen()),
+                );
+              },
+              child: Text('History'),
+            ),
           ],
         ),
       ),
@@ -307,7 +379,7 @@ class TextFieldWidget extends StatelessWidget {
                 ),
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 20.0,
-                  vertical: 15.0,
+                  vertical: 16.0,
                 ),
               ),
             ),
