@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ControlInventoryManagment.Models;
 
-namespace ControlInventoryManagment.DatabaseContext
-{
+namespace ControlInventoryManagment.DatabaseContext;
+
     public class AppDbContext : DbContext
     {
         public DbSet<Categorie> Categories { get; set; }
@@ -20,6 +20,11 @@ namespace ControlInventoryManagment.DatabaseContext
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            GeneratingRelations(modelBuilder);
+        }
+
+        private void GeneratingRelations(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Entreprise>()
                 .HasOne(e => e.City)
@@ -47,9 +52,8 @@ namespace ControlInventoryManagment.DatabaseContext
 
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Categorie)
-                .WithMany()
+                .WithMany(category => category.Products)
                 .HasForeignKey(p => p.CategorieId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
-}

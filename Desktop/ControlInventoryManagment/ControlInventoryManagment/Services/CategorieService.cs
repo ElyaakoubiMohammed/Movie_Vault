@@ -1,44 +1,48 @@
-﻿using ControlInventoryManagment.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
+using ControlInventoryManagment.DTOs.Categorie;
 using ControlInventoryManagment.ServicesContract;
 using ControlInventoryManagment.ServicesContract.Repos;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using ControlInventoryManagment.Models;
 
 namespace ControlInventoryManagment.Services
 {
-    public class CategorieService : ICategorieService
+    public class CategorieService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CategorieService(IUnitOfWork unitOfWork)
+        public CategorieService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Categorie>> GetAllCategories()
-        {
-            return await _unitOfWork.Categories.GetAllCategories();
-        }
-
-        public async Task<Categorie> GetCategorieById(int id)
+        public async Task<CategorieReadDTO> GetCategorieById(int id)
         {
             return await _unitOfWork.Categories.GetCategorieById(id);
         }
 
-        public async Task<Categorie> CreateCategorie(Categorie newCategorie)
+        public async Task<CategorieReadDTO> GetCategorieByName(string name)
         {
-            await _unitOfWork.Categories.CreateCategorie(newCategorie);
-            await _unitOfWork.CommitAsync(); // Save changes after creating category
-            return newCategorie; // Return the created category
+            return await _unitOfWork.Categories.GetCategorieByName(name);
         }
 
-        public async Task UpdateCategorie(Categorie updatedCategorie)
+        public async Task<CategorieReadDTO> CreateCategorie(CategorieCreateDTO newCategorieDTO)
         {
-            await _unitOfWork.Categories.UpdateCategorie(updatedCategorie);
-            await _unitOfWork.CommitAsync(); // Save changes after updating category
+            var categorie = await _unitOfWork.Categories.CreateCategorie(newCategorieDTO);
+            await _unitOfWork.CommitAsync();
+            return categorie;
         }
 
-        public async Task DeleteCategorie(Categorie categorie)
+        public async Task UpdateCategorie(CategorieUpdateDTO updatedCategorieDTO)
+        {
+            await _unitOfWork.Categories.UpdateCategorie(updatedCategorieDTO);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task DeleteCategorie(CategorieReadDTO categorie)
         {
             await _unitOfWork.Categories.DeleteCategorie(categorie);
             await _unitOfWork.CommitAsync();

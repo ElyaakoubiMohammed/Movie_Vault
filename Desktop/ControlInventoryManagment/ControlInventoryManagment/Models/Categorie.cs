@@ -6,10 +6,10 @@ namespace ControlInventoryManagment.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        public string NameCategorie { get; set; }
+        public required string Name { get; set; }
 
-        [Required]
-        public string Description { get; set; }
+        public required string Description { get; set; }
+
+        public required IEnumerable<Product> Products { get; set; }
     }
 }

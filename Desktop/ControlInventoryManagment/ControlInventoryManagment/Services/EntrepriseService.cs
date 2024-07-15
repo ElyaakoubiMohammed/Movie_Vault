@@ -1,12 +1,11 @@
+using ControlInventoryManagment.DTOs;
 using ControlInventoryManagment.Models;
-using ControlInventoryManagment.ServicesContract;
 using ControlInventoryManagment.ServicesContract.Repos;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ControlInventoryManagment.Services
 {
-    public class EntrepriseService : IEntrepriseService
+    public class EntrepriseService
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -15,33 +14,33 @@ namespace ControlInventoryManagment.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Entreprise>> GetAllEntreprises()
-        {
-            return await _unitOfWork.Entreprises.GetAllEntreprise();
-        }
-
-        public async Task<Entreprise> GetEntrepriseById(int id)
+        public async Task<EntrepriseReadDTO> GetEntrepriseById(int id)
         {
             return await _unitOfWork.Entreprises.GetEntrepriseById(id);
         }
 
-        public async Task<Entreprise> CreateEntreprise(Entreprise newEntreprise)
+        public async Task<EntrepriseReadDTO> GetEntrepriseByName(string name)
         {
-            await _unitOfWork.Entreprises.CreateEntreprise(newEntreprise);
-            await _unitOfWork.CommitAsync(); // Save changes after creating entreprise
-            return newEntreprise; // Return the created entreprise
+            return await _unitOfWork.Entreprises.GetEntrepriseByName(name);
         }
 
-        public async Task UpdateEntreprise(Entreprise updatedEntreprise)
+        public async Task<EntrepriseReadDTO> CreateEntreprise(EntrepriseCreateDTO newEntrepriseDTO)
         {
-            await _unitOfWork.Entreprises.UpdateEntreprise(updatedEntreprise);
-            await _unitOfWork.CommitAsync(); // Save changes after updating entreprise
+            var entreprise = await _unitOfWork.Entreprises.CreateEntreprise(newEntrepriseDTO);
+            await _unitOfWork.CommitAsync();
+            return entreprise;
         }
 
-        public async Task DeleteEntreprise(Entreprise entreprise)
+        public async Task UpdateEntreprise(EntrepriseUpdateDTO updatedEntrepriseDTO)
         {
-            await _unitOfWork.Entreprises.DeleteEntreprise(entreprise);
-            await _unitOfWork.CommitAsync(); // Save changes after deleting entreprise
+            await _unitOfWork.Entreprises.UpdateEntreprise(updatedEntrepriseDTO);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task DeleteEntreprise(int id)
+        {
+            await _unitOfWork.Entreprises.DeleteEntreprise(id);
+            await _unitOfWork.CommitAsync();
         }
     }
 }

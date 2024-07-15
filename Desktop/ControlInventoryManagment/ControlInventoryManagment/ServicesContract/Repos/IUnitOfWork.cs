@@ -14,7 +14,7 @@ namespace ControlInventoryManagment.ServicesContract.Repos
         IOperationRepository Operations { get; }
         IProductRepository Products { get; }
         IStockageRepository Stockages { get; }
-        ITypeEtagenRepository TypeEtages { get; }
+        ITypeEtageRepository TypeEtages { get; }
 
         Task<int> CommitAsync();
     }

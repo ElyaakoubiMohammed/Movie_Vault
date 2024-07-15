@@ -2,10 +2,9 @@ using AutoMapper;
 using ControlInventoryManagment.Models;
 using ControlInventoryManagment.DTOs.Categorie;
 using ControlInventoryManagment.DTOs.City;
-using ControlInventoryManagment.DTOs.Entreprise;
+using ControlInventoryManagment.DTOs;
 using ControlInventoryManagment.DTOs.Etage;
 using ControlInventoryManagment.DTOs.Local;
-using ControlInventoryManagment.DTOs.Operation;
 using ControlInventoryManagment.DTOs.Product;
 using ControlInventoryManagment.DTOs.Stockage;
 using ControlInventoryManagment.DTOs.TypeEtage;
@@ -16,44 +15,41 @@ namespace ControlInventoryManagment.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<Categorie, CategorieCreateDTO>().ReverseMap();
-            CreateMap<Categorie, CategorieReadDTO>().ReverseMap();
-            CreateMap<Categorie, CategorieUpdateDTO>().ReverseMap();
+            CreateMap<Categorie, CategorieCreateDTO>();
+            CreateMap<Categorie, CategorieReadDTO>();
+            CreateMap<Categorie, CategorieUpdateDTO>();
 
-            CreateMap<City, CityCreateDTO>().ReverseMap();
-            CreateMap<City, CityUpdateDTO>().ReverseMap();
-            CreateMap<City, CityReadDTO>().ReverseMap();
-            
-            CreateMap<Entreprise, EntrepriseCreateDTO>().ReverseMap();
-            CreateMap<Entreprise, EntrepriseUpdateDTO>().ReverseMap();
-            CreateMap<Entreprise, EntrepriseReadDTO>().ReverseMap();
+            CreateMap<City, CityCreateDTO>();
+            CreateMap<City, CityUpdateDTO>();
+            CreateMap<City, CityReadDTO>();
 
-            CreateMap<Etage, EtageCreateDTO>().ReverseMap();
-            CreateMap<Etage, EtageUpdateDTO>().ReverseMap();
-            CreateMap<Etage, EtageReadDTO>().ReverseMap();
+            CreateMap<Entreprise, EntrepriseCreateDTO>();
+            CreateMap<Entreprise, EntrepriseUpdateDTO>();
+            CreateMap<Entreprise, EntrepriseReadDTO>();
 
-            CreateMap<Local, LocalCreateDTO>().ReverseMap();
-            CreateMap<Local, LocalUpdateDTO>().ReverseMap();
-            CreateMap<Local, LocalReadDTO>().ReverseMap();
+            CreateMap<Etage, EtageCreateDTO>();
+            CreateMap<Etage, EtageUpdateDTO>();
+            CreateMap<Etage, EtageReadDTO>();
 
-            CreateMap<Operation, OperationCreateDTO>().ReverseMap();
-            CreateMap<Operation, OperationUpdateDTO>().ReverseMap();
-            CreateMap<Operation, OperationReadDTO>().ReverseMap();
-            
-            CreateMap<Product, ProductCreateDTO>().ReverseMap();
-            CreateMap<Product, ProductUpdateDTO>().ReverseMap();
-            CreateMap<Product, ProductReadDTO>().ReverseMap();
+            CreateMap<Local, LocalCreateDTO>();
+            CreateMap<Local, LocalUpdateDTO>();
+            CreateMap<Local, LocalReadDTO>();
 
-            CreateMap<Stockage, StockageCreateDTO>().ReverseMap();
-            CreateMap<Local, StockageUpdateDTO>().ReverseMap();
-            CreateMap<Local, StockageReadDTO>().ReverseMap();
+            CreateMap<Operation, OperationCreateDTO>();
+            CreateMap<Operation, OperationUpdateDTO>();
+            CreateMap<Operation, OperationReadDTO>();
 
-            CreateMap<TypeEtage, TypeEtageCreateDTO>().ReverseMap();
-            CreateMap<TypeEtage, TypeEtageUpdateDTO>().ReverseMap();
-            CreateMap<TypeEtage, TypeEtageReadDTO>().ReverseMap();
+            CreateMap<Product, ProductCreateDTO>();
+            CreateMap<Product, ProductUpdateDTO>();
+            CreateMap<Product, ProductReadDTO>();
 
+            CreateMap<Stockage, StockageCreateDTO>();
+            CreateMap<Stockage, StockageUpdateDTO>();
+            CreateMap<Stockage, StockageReadDTO>();
 
-
+            CreateMap<TypeEtage, TypeEtageCreateDTO>();
+            CreateMap<TypeEtage, TypeEtageUpdateDTO>();
+            CreateMap<TypeEtage, TypeEtageReadDTO>();
         }
     }
 }

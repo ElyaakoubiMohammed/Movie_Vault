@@ -1,48 +1,114 @@
+using AutoMapper;
 using ControlInventoryManagment.DatabaseContext;
+using ControlInventoryManagment.DTOs.City;
+using ControlInventoryManagment.Exceptions;
 using ControlInventoryManagment.Models;
 using ControlInventoryManagment.ServicesContract.Repos;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 
 namespace ControlInventoryManagment.Repositories
 {
     public class CityRepository : ICityRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext _db;
+        private readonly IMapper _mapper;
 
-        public CityRepository(AppDbContext dbContext)
+        public CityRepository(AppDbContext db, IMapper mapper)
         {
-            _dbContext = dbContext;
+            _db = db;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<City>> GetAllCities()
+        public async Task<CityReadDTO> GetCityById(int id)
         {
-            return await _dbContext.Cities.ToListAsync();
+            City? city = await _db.Cities.FindAsync(id);
+
+            if (city == null)
+            {
+                throw new NotFoundException($"City with id {id} not found.");
+            }
+
+            return _mapper.Map<CityReadDTO>(city);
         }
 
-        public async Task<City> GetCityById(int id)
+        public async Task<CityReadDTO> GetCityByName(string name)
         {
-            return await _dbContext.Cities.FindAsync(id);
+            City? city = await _db.Cities.FirstOrDefaultAsync(c => c.Name == name);
+
+            if (city == null)
+            {
+                throw new NotFoundException($"City with name {name} not found.");
+            }
+
+            return _mapper.Map<CityReadDTO>(city);
         }
 
-        public async Task<City> CreateCity(City newCity)
+        public async Task<City> CreateCity(CityCreateDTO newCityDTO)
         {
-            await _dbContext.Cities.AddAsync(newCity);
-            await _dbContext.SaveChangesAsync();
-            return newCity;
+            var newCity = _mapper.Map<City>(newCityDTO);
+
+            await using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    await _db.Cities.AddAsync(newCity);
+                    await _db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    return newCity;
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw new NotSavedException();
+                }
+            }
         }
 
-        public async Task UpdateCity(City updatedCity)
+        public async Task UpdateCity(CityUpdateDTO updatedCityDTO)
         {
-            _dbContext.Cities.Update(updatedCity);
-            await _dbContext.SaveChangesAsync();
+            var existingCity = await _db.Cities.FindAsync(updatedCityDTO.Id);
+
+            if (existingCity == null)
+            {
+                throw new NotFoundException($"City with id {updatedCityDTO.Id} not found.");
+            }
+
+            _mapper.Map(updatedCityDTO, existingCity);
+
+            await using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    _db.Cities.Update(existingCity);
+                    await _db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw new NotUpdatedException();
+                }
+            }
         }
 
         public async Task DeleteCity(City city)
         {
-            _dbContext.Cities.Remove(city);
-            await _dbContext.SaveChangesAsync();
+            await using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    _db.Cities.Remove(city);
+                    await _db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw new NotDeletedException();
+                }
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
+using ControlInventoryManagment.DTOs;
 using ControlInventoryManagment.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,10 +8,10 @@ namespace ControlInventoryManagment.ServicesContract.Repos
 {
     public interface IOperationRepository
     {
-        Task<IEnumerable<Operation>> GetAllOperations();
-        Task<Operation> GetOperationById(int id);
-        Task<Operation> CreateOperation(Operation newOperation);
-        Task UpdateOperation(Operation updatedOperation);
-        Task DeleteOperation(Operation operation);
+        Task<OperationReadDTO> GetOperationById(int id);
+        Task<OperationReadDTO> CreateOperation(OperationCreateDTO newOperation);
+        Task UpdateOperation(OperationUpdateDTO updatedOperation);
+        Task DeleteOperation(int id);
+        Task<IEnumerable<OperationReadDTO>> GetOperationsByDateRange(DateTime startDate, DateTime endDate);
     }
 }

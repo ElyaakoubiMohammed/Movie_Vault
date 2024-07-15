@@ -1,88 +1,96 @@
+using ControlInventoryManagment.DTOs;
 using ControlInventoryManagment.Models;
-using ControlInventoryManagment.ServicesContract.Repos;
+using ControlInventoryManagment.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 
 namespace ControlInventoryManagment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EntreprisesController : ControllerBase
+    public class EntrepriseController : ControllerBase
     {
-        private readonly IEntrepriseRepository _entrepriseRepository;
+        private readonly EntrepriseService _entrepriseService;
 
-        public EntreprisesController(IEntrepriseRepository entrepriseRepository)
+        public EntrepriseController(EntrepriseService entrepriseService)
         {
-            _entrepriseRepository = entrepriseRepository;
+            _entrepriseService = entrepriseService;
         }
 
-        // GET: api/entreprises
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Entreprise>>> GetEntreprises()
-        {
-            var entreprises = await _entrepriseRepository.GetAllEntreprise();
-            return Ok(entreprises);
-        }
-
-        // GET: api/entreprises/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Entreprise>> GetEntreprise(int id)
+        public async Task<ActionResult<EntrepriseReadDTO>> GetEntrepriseById(int id)
         {
-            var entreprise = await _entrepriseRepository.GetEntrepriseById(id);
-
-            if (entreprise == null)
+            try
             {
-                return NotFound();
+                var entreprise = await _entrepriseService.GetEntrepriseById(id);
+                return Ok(entreprise);
             }
-
-            return Ok(entreprise);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // POST: api/entreprises
+        [HttpGet("name/{name}")]
+        public async Task<ActionResult<EntrepriseReadDTO>> GetEntrepriseByName(string name)
+        {
+            try
+            {
+                var entreprise = await _entrepriseService.GetEntrepriseByName(name);
+                return Ok(entreprise);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
-        public async Task<ActionResult<Entreprise>> CreateEntreprise(Entreprise newEntreprise)
+        public async Task<ActionResult<EntrepriseReadDTO>> CreateEntreprise(EntrepriseCreateDTO newEntrepriseDTO)
         {
-            if (newEntreprise == null)
+            try
             {
-                return BadRequest();
+                var createdEntreprise = await _entrepriseService.CreateEntreprise(newEntrepriseDTO);
+                return CreatedAtAction(nameof(GetEntrepriseById), new { id = createdEntreprise.Id }, createdEntreprise);
             }
-
-            var entreprise = await _entrepriseRepository.CreateEntreprise(newEntreprise);
-            return CreatedAtAction(nameof(GetEntreprise), new { id = entreprise.Id }, entreprise);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PUT: api/entreprises/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEntreprise(int id, Entreprise updatedEntreprise)
+        public async Task<IActionResult> UpdateEntreprise(int id, EntrepriseUpdateDTO updatedEntrepriseDTO)
         {
-            if (id != updatedEntreprise.Id)
+            try
             {
-                return BadRequest();
-            }
+                if (id != updatedEntrepriseDTO.Id)
+                {
+                    return BadRequest("ID mismatch between route parameter and payload data.");
+                }
 
-            var existingEntreprise = await _entrepriseRepository.GetEntrepriseById(id);
-            if (existingEntreprise == null)
+                await _entrepriseService.UpdateEntreprise(updatedEntrepriseDTO);
+                return NoContent();
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
-
-            await _entrepriseRepository.UpdateEntreprise(updatedEntreprise);
-            return NoContent();
         }
 
-        // DELETE: api/entreprises/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEntreprise(int id)
         {
-            var entreprise = await _entrepriseRepository.GetEntrepriseById(id);
-            if (entreprise == null)
+            try
             {
-                return NotFound();
+                await _entrepriseService.DeleteEntreprise(id);
+                return NoContent();
             }
-
-            await _entrepriseRepository.DeleteEntreprise(entreprise);
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

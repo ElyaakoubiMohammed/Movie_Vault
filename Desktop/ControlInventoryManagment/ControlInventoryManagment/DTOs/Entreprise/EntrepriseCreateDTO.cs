@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using ControlInventoryManagment.Models;
+using ControlInventoryManagment.DTOs.Etage;
+using ControlInventoryManagment.DTOs.Local;
 
-namespace ControlInventoryManagment.DTOs.Entreprise
+namespace ControlInventoryManagment.DTOs;
+
+public class EntrepriseCreateDTO
 {
-    public class EntrepriseCreateDTO
-    {
-        public required string Name { get; set; }
-        public int CityId { get; set; }
-        public required string Adresse { get; set; }
-        public  required List<Local > Locals { get; set; }  //
-        public required List< ControlInventoryManagment.Models.Etage> Etages { get; set; }  // 
-    }
+    public required string Name { get; set; }
+    public int CityId { get; set; }
+    public required string Adresse { get; set; }
+    public  required List<LocalCreateDTO> Locals { get; set; }  
+    public required List<EtageCreateDTO> Etages { get; set; }  
 }

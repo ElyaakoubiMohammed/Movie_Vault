@@ -1,84 +1,116 @@
-using Microsoft.AspNetCore.Mvc;
-using ControlInventoryManagment.Models;
-using ControlInventoryManagment.ServicesContract.Repos;
-using ControlInventoryManagment.DTOs.City;
-using AutoMapper;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using ControlInventoryManagment.DTOs.City;
+using ControlInventoryManagment.Models;
+using ControlInventoryManagment.Services;
+using ControlInventoryManagment.Exceptions;
 
 namespace ControlInventoryManagment.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CityController : ControllerBase
     {
-        private readonly ICityRepository _cityRepository;
-        private readonly IMapper _mapper;
+        private readonly CityService _cityService;
 
-        public CityController(ICityRepository cityRepository, IMapper mapper)
+        public CityController(CityService cityService)
         {
-            _cityRepository = cityRepository;
-            _mapper = mapper;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCities()
-        {
-            var cities = await _cityRepository.GetAllCities();
-            return Ok(cities);
+            _cityService = cityService;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<City>> GetCity(int id)
+        public async Task<ActionResult<CityReadDTO>> GetCityById(int id)
         {
-            var city = await _cityRepository.GetCityById(id);
-
-            if (city == null)
+            try
             {
-                return NotFound();
+                var city = await _cityService.GetCityById(id);
+                if (city == null)
+                {
+                    return NotFound("City not found.");
+                }
+                return Ok(city);
             }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
-            return Ok(city);
+        [HttpGet("by-name/{name}")]
+        public async Task<ActionResult<CityReadDTO>> GetCityByName(string name)
+        {
+            try
+            {
+                var city = await _cityService.GetCityByName(name);
+                if (city == null)
+                {
+                    return NotFound("City not found.");
+                }
+                return Ok(city);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<City>> CreateCity(CityCreateDTO cityCreateDto)
+        public async Task<ActionResult<CityReadDTO>> CreateCity(CityCreateDTO newCityDTO)
         {
-            var newCity = _mapper.Map<City>(cityCreateDto);
-            var createdCity = await _cityRepository.CreateCity(newCity);
-            return CreatedAtAction(nameof(GetCity), new { id = createdCity.Id }, createdCity);
+            try
+            {
+                var createdCity = await _cityService.CreateCity(newCityDTO);
+                return CreatedAtAction(nameof(GetCityById), new { id = createdCity.Id }, createdCity);
+            }
+            catch (NotSavedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCity(int id, CityUpdateDTO cityUpdateDto)
+        public async Task<IActionResult> UpdateCity(int id, CityUpdateDTO updatedCityDTO)
         {
-            var cityFromRepo = await _cityRepository.GetCityById(id);
-            if (cityFromRepo == null)
+            if (id != updatedCityDTO.Id)
             {
-                return NotFound();
+                return BadRequest("ID mismatch.");
             }
 
-            // Update the existing cityFromRepo with data from cityUpdateDto
-            _mapper.Map(cityUpdateDto, cityFromRepo);
-
-            await _cityRepository.UpdateCity(cityFromRepo);
-
-            return NoContent();
+            try
+            {
+                await _cityService.UpdateCity(updatedCityDTO);
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (NotUpdatedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCity(int id)
+public async Task<IActionResult> DeleteCity(int id)
+{
+    try
+    {
+        var city = await _cityService.GetCityById(id);
+        if (city == null)
         {
-            var city = await _cityRepository.GetCityById(id);
-
-            if (city == null)
-            {
-                return NotFound();
-            }
-
-            await _cityRepository.DeleteCity(city);
-
-            return NoContent();
+            return NotFound("City not found.");
         }
+
+        await _cityService.DeleteCity(city);
+
+        return NoContent();
+    }
+    catch (NotDeletedException ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
+
     }
 }

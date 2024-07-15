@@ -1,83 +1,108 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ControlInventoryManagment.Models;
-using ControlInventoryManagment.ServicesContract.Repos;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using ControlInventoryManagment.DTOs.Categorie;
-using AutoMapper;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using ControlInventoryManagment.Services;
+using ControlInventoryManagment.Exceptions;
 
 namespace ControlInventoryManagment.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class CategorieController : ControllerBase
+    [Route("api/[controller]")]
+    public class CategoriesController : ControllerBase
     {
-        private readonly ICategorieRepository _categorieRepository;
-        private readonly IMapper _mapper;
+        private readonly CategorieService _categorieService;
 
-        public CategorieController(ICategorieRepository categorieRepository, IMapper mapper)
+        public CategoriesController(CategorieService categorieService)
         {
-            _categorieRepository = categorieRepository;
-            _mapper = mapper;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categorie>>> GetCategories()
-        {
-            var categories = await _categorieRepository.GetAllCategories();
-            return Ok(categories);
+            _categorieService = categorieService;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Categorie>> GetCategorie(int id)
+        public async Task<ActionResult<CategorieReadDTO>> GetCategorieById(int id)
         {
-            var categorie = await _categorieRepository.GetCategorieById(id);
-
-            if (categorie == null)
+            try
             {
-                return NotFound();
+                var categorie = await _categorieService.GetCategorieById(id);
+                if (categorie == null)
+                {
+                    return NotFound("Category not found.");
+                }
+                return Ok(categorie);
             }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
 
-            return Ok(categorie);
+        [HttpGet("by-name/{name}")]
+        public async Task<ActionResult<CategorieReadDTO>> GetCategorieByName(string name)
+        {
+            try
+            {
+                var categorie = await _categorieService.GetCategorieByName(name);
+                if (categorie == null)
+                {
+                    return NotFound("Category not found.");
+                }
+                return Ok(categorie);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult<Categorie>> CreateCategorie(Categorie newCategorie)
+        public async Task<ActionResult<CategorieReadDTO>> CreateCategorie(CategorieCreateDTO newCategorieDTO)
         {
-            var createdCategorie = await _categorieRepository.CreateCategorie(newCategorie);
-            return CreatedAtAction(nameof(GetCategorie), new { id = createdCategorie.Id }, createdCategorie);
+            try
+            {
+                var createdCategorie = await _categorieService.CreateCategorie(newCategorieDTO);
+                return CreatedAtAction(nameof(GetCategorieById), new { id = createdCategorie.Id }, createdCategorie);
+            }
+            catch (NotSavedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategorie(int id, CategorieUpdateDTO categorieUpdateDto)
+        [HttpPut("")]
+        public async Task<IActionResult> UpdateCategorie(CategorieUpdateDTO updatedCategorieDTO)
         {
-            var categorieFromRepo = await _categorieRepository.GetCategorieById(id);
-            if (categorieFromRepo == null)
+            try
+            {
+                await _categorieService.UpdateCategorie(updatedCategorieDTO);
+                return NoContent();
+            }
+            catch (NotFoundException)
             {
                 return NotFound();
             }
-
-            // Update the existing categorieFromRepo with data from categorieUpdateDto
-            _mapper.Map(categorieUpdateDto, categorieFromRepo);
-
-            await _categorieRepository.UpdateCategorie(categorieFromRepo);
-
-            return NoContent();
+            catch (NotUpdatedException)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategorie(int id)
         {
-            var categorie = await _categorieRepository.GetCategorieById(id);
-
-            if (categorie == null)
+            try
             {
-                return NotFound();
+                var categorie = await _categorieService.GetCategorieById(id);
+                if (categorie == null)
+                {
+                    return NotFound("Category not found.");
+                }
+
+                await _categorieService.DeleteCategorie(categorie);
+                return NoContent();
             }
-
-            await _categorieRepository.DeleteCategorie(categorie);
-
-            return NoContent();
+            catch (NotDeletedException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

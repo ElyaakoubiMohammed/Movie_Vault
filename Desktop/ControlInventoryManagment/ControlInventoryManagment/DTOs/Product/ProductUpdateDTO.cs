@@ -5,6 +5,7 @@ namespace ControlInventoryManagment.DTOs.Product
 {
     public class ProductUpdateDTO
     {
+        public int Id { get; set; }
         public required string Name { get; set; }
         public int IdCategorie { get; set; }
         public int IdTag { get; set; }

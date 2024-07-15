@@ -1,48 +1,106 @@
+using AutoMapper;
 using ControlInventoryManagment.DatabaseContext;
+using ControlInventoryManagment.DTOs.Stockage;
+using ControlInventoryManagment.Exceptions;
 using ControlInventoryManagment.Models;
 using ControlInventoryManagment.ServicesContract.Repos;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 
 namespace ControlInventoryManagment.Repositories
 {
     public class StockageRepository : IStockageRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContext _db;
+        private readonly IMapper _mapper;
 
-        public StockageRepository(AppDbContext dbContext)
+        public StockageRepository(AppDbContext db, IMapper mapper)
         {
-            _dbContext = dbContext;
+            _db = db;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Stockage>> GetAllStockage()
+        public async Task<StockageReadDTO> GetStockageById(int id)
         {
-            return await _dbContext.Stockages.ToListAsync();
+            var stockage = await _db.Stockages.FindAsync(id);
+            if (stockage == null)
+            {
+                throw new NotFoundException($"Stockage with id {id} not found.");
+            }
+
+            return _mapper.Map<StockageReadDTO>(stockage);
         }
 
-        public async Task<Stockage> GetStockageById(int id)
+        public async Task<StockageReadDTO> CreateStockage(StockageCreateDTO newStockage)
         {
-            return await _dbContext.Stockages.FindAsync(id);
+            var stockageEntity = _mapper.Map<Stockage>(newStockage);
+
+            await using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    await _db.Stockages.AddAsync(stockageEntity);
+                    await _db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    return _mapper.Map<StockageReadDTO>(stockageEntity);
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw new NotSavedException("Failed to save Stockage.");
+                }
+            }
         }
 
-        public async Task<Stockage> CreateStockage(Stockage newStockage)
+        public async Task UpdateStockage(int id, StockageUpdateDTO updatedStockage)
         {
-            await _dbContext.Stockages.AddAsync(newStockage);
-            await _dbContext.SaveChangesAsync();
-            return newStockage;
+            var stockageEntity = await _db.Stockages.FindAsync(id);
+            if (stockageEntity == null)
+            {
+                throw new NotFoundException($"Stockage with id {id} not found.");
+            }
+
+            _mapper.Map(updatedStockage, stockageEntity);
+
+            await using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    _db.Stockages.Update(stockageEntity);
+                    await _db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw new NotUpdatedException("Failed to update Stockage.");
+                }
+            }
         }
 
-        public async Task UpdateStockage(Stockage updatedStockage)
+        public async Task DeleteStockage(int id)
         {
-            _dbContext.Stockages.Update(updatedStockage);
-            await _dbContext.SaveChangesAsync();
-        }
+            var stockageEntity = await _db.Stockages.FindAsync(id);
+            if (stockageEntity == null)
+            {
+                throw new NotFoundException($"Stockage with id {id} not found.");
+            }
 
-        public async Task DeleteStockage(Stockage stockage)
-        {
-            _dbContext.Stockages.Remove(stockage);
-            await _dbContext.SaveChangesAsync();
+            await using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    _db.Stockages.Remove(stockageEntity);
+                    await _db.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw new NotDeletedException("Failed to delete Stockage.");
+                }
+            }
         }
     }
 }

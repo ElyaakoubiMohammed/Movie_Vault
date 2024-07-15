@@ -9,13 +9,10 @@ namespace ControlInventoryManagment.Models
 
         public int CityId { get; set; }
 
-        [Required]
-        public City City { get; set; }
+        public required City City { get; set; }
 
-        [Required]
-        public List<Etage> Etages { get; set; }
+        public required List<Etage> Etages { get; set; }
 
-        [Required]
-        public string Address { get; set; }
+        public required string Address { get; set; }
     }
 }

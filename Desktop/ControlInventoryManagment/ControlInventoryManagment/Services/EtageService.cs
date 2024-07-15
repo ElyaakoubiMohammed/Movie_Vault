@@ -1,47 +1,42 @@
+using ControlInventoryManagment.DTOs.Etage;
 using ControlInventoryManagment.Models;
-using ControlInventoryManagment.ServicesContract;
 using ControlInventoryManagment.ServicesContract.Repos;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ControlInventoryManagment.Services
 {
-    public class EtageService : IEtageService
+    public class EtageService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IEtageRepository _etageRepository;
 
-        public EtageService(IUnitOfWork unitOfWork)
+        public EtageService(IEtageRepository etageRepository)
         {
-            _unitOfWork = unitOfWork;
+            _etageRepository = etageRepository;
         }
 
-        public async Task<IEnumerable<Etage>> GetAllEtages()
+        public Task<EtageReadDTO> GetEtageById(int id)
         {
-            return await _unitOfWork.Etages.GetAllEtage();
+            return _etageRepository.GetEtageById(id);
         }
 
-        public async Task<Etage> GetEtageById(int id)
+        public Task<EtageReadDTO> GetEtageByType(string typeEtage)
         {
-            return await _unitOfWork.Etages.GetEtageById(id);
+            return _etageRepository.GetEtageByType(typeEtage);
         }
 
-        public async Task<Etage> CreateEtage(Etage newEtage)
+        public Task<Etage> CreateEtage(EtageCreateDTO newEtage)
         {
-            await _unitOfWork.Etages.CreateEtage(newEtage);
-            await _unitOfWork.CommitAsync(); // Save changes after creating etage
-            return newEtage; // Return the created etage
+            return _etageRepository.CreateEtage(newEtage);
         }
 
-        public async Task UpdateEtage(Etage updatedEtage)
+        public Task UpdateEtage(EtageUpdateDTO updatedEtage)
         {
-            await _unitOfWork.Etages.UpdateEtage(updatedEtage);
-            await _unitOfWork.CommitAsync(); // Save changes after updating etage
+            return _etageRepository.UpdateEtage(updatedEtage);
         }
 
-        public async Task DeleteEtage(Etage etage)
+        public Task DeleteEtage(Etage etage)
         {
-            await _unitOfWork.Etages.DeleteEtage(etage);
-            await _unitOfWork.CommitAsync(); // Save changes after deleting etage
+            return _etageRepository.DeleteEtage(etage);
         }
     }
 }

@@ -6,9 +6,8 @@ namespace ControlInventoryManagment.Models
     {
         public int Id { get; set; }
         
-        [Required]
-        public string Name { get; set; } // 'required' should be 'Required' to match attribute usage
+        public required string Name { get; set; }
 
-        public List<Local> Locals { get; set; } // Corrected 'locals' to 'Locals'
+        public required List<Local> Locals { get; set; } 
     }
 }

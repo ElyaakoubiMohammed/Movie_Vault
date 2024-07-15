@@ -1,47 +1,49 @@
+using AutoMapper;
+using ControlInventoryManagment.DTOs.City;
 using ControlInventoryManagment.Models;
-using ControlInventoryManagment.ServicesContract;
 using ControlInventoryManagment.ServicesContract.Repos;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ControlInventoryManagment.Services
 {
-    public class CityService : ICityService
+    public class CityService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CityService(IUnitOfWork unitOfWork)
+        public CityService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<City>> GetAllCities()
-        {
-            return await _unitOfWork.Cities.GetAllCities();
-        }
-
-        public async Task<City> GetCityById(int id)
+        public async Task<CityReadDTO> GetCityById(int id)
         {
             return await _unitOfWork.Cities.GetCityById(id);
         }
 
-        public async Task<City> CreateCity(City newCity)
+        public async Task<CityReadDTO> GetCityByName(string name)
         {
-            await _unitOfWork.Cities.CreateCity(newCity);
-            await _unitOfWork.CommitAsync(); // Save changes after creating city
-            return newCity; // Return the created city
+            return await _unitOfWork.Cities.GetCityByName(name);
         }
 
-        public async Task UpdateCity(City updatedCity)
+        public async Task<City> CreateCity(CityCreateDTO newCityDTO)
         {
-            await _unitOfWork.Cities.UpdateCity(updatedCity);
-            await _unitOfWork.CommitAsync(); // Save changes after updating city
+            var city = await _unitOfWork.Cities.CreateCity(newCityDTO);
+            await _unitOfWork.CommitAsync();
+            return city;
         }
 
-        public async Task DeleteCity(City city)
+        public async Task UpdateCity(CityUpdateDTO updatedCityDTO)
+        {
+            await _unitOfWork.Cities.UpdateCity(updatedCityDTO);
+            await _unitOfWork.CommitAsync();
+        }
+
+        public async Task DeleteCity(CityReadDTO city)
         {
             await _unitOfWork.Cities.DeleteCity(city);
-            await _unitOfWork.CommitAsync(); // Save changes after deleting city
+            await _unitOfWork.CommitAsync();
         }
     }
 }

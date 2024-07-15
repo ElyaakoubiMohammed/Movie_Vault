@@ -8,13 +8,10 @@ namespace ControlInventoryManagment.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        public DateTime DateDebut { get; set; }
+        public required DateTime DateDebut { get; set; }
 
-        [Required]
-        public DateTime DateFin { get; set; }
+        public required DateTime DateFin { get; set; }
 
-        [Required]
-        public List<Product> Products { get; set; }
+        public required List<Product> Products { get; set; }
     }
 }

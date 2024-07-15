@@ -9,7 +9,7 @@ namespace ControlInventoryManagment.DTOs.Product;
         public int CategorieId { get; set; }
         public int TagId { get; set; }
         public int QrId { get; set; }
-        public required string SerialNum { get; set; }
+        public required string SerialNumber { get; set; }
         public required List<ControlInventoryManagment.Models.Operation> Operation { get; set; }  // IDs of the Operations
     }
 

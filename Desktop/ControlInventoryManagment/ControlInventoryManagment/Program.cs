@@ -1,7 +1,6 @@
 using ControlInventoryManagment.DatabaseContext;
 using ControlInventoryManagment.ServicesContract;
 using ControlInventoryManagment.ServicesContract.Repos;
-using ControlInventoryManagment.Services;
 using ControlInventoryManagment.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +35,7 @@ builder.Services.AddScoped<ILocalRepository, LocalRepository>();
 builder.Services.AddScoped<IOperationRepository, OperationRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IStockageRepository, StockageRepository>();
-builder.Services.AddScoped<ITypeEtagenRepository, TypeEtageRepository>();
+builder.Services.AddScoped<ITypeEtageRepository, TypeEtageRepository>();
 
 
 // Register AutoMapper
@@ -51,8 +50,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
+app.UseRouting();
 
 app.MapControllers();
 

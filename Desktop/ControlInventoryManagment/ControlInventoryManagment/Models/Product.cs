@@ -7,8 +7,7 @@ namespace ControlInventoryManagment.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         public int CategorieId { get; set; }
 
@@ -16,13 +15,10 @@ namespace ControlInventoryManagment.Models
 
         public int QrId { get; set; }
 
-        [Required]
-        public string SerialNum { get; set; }
+        public required string SerialNumber { get; set; }
 
-        [Required]
-        public List<Operation> Operations { get; set; }
+        public required List<Operation> Operations { get; set; }
 
-        [Required]
-        public Categorie Categorie { get; set; }
+        public required Categorie Categorie { get; set; }
     }
 }

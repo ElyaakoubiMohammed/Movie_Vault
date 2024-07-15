@@ -1,15 +1,15 @@
-using ControlInventoryManagment.Models;
+using ControlInventoryManagment.DTOs.TypeEtage;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ControlInventoryManagment.ServicesContract.Repos
 {
-    public interface ITypeEtagenRepository
+    public interface ITypeEtageRepository
     {
-        Task<IEnumerable<TypeEtage>> GetAllTypeEtage();
-        Task<TypeEtage> GetTypeEtageById(int id);
-        Task<TypeEtage> CreateTypeEtage(TypeEtage newTypeEtage);
-        Task UpdateTypeEtage(TypeEtage updatedTypeEtage);
-        Task DeleteTypeEtage(TypeEtage TypeEtage);
+        Task<TypeEtageReadDTO> GetTypeEtageById(int id);
+        Task<TypeEtageReadDTO> CreateTypeEtage(TypeEtageCreateDTO newTypeEtage);
+        Task UpdateTypeEtage(TypeEtageUpdateDTO updatedTypeEtage);
+        Task DeleteTypeEtage(int id);
+        Task<TypeEtageReadDTO> GetTypeEtageByName(string name);
     }
 }

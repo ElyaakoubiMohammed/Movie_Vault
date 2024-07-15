@@ -7,13 +7,8 @@ namespace ControlInventoryManagment.Models
     public class Stockage
     {
         public int Id { get; set; }
-
-        [Required]
-        public List<Product> Products { get; set; }
-
+        public required List<Product> Products { get; set; }
         public int EtagetId { get; set; }
-
-        [Required]
-        public Etage Etage { get; set; }
+        public required Etage Etage { get; set; }
     }
 }

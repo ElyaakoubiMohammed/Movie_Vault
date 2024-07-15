@@ -1,3 +1,4 @@
+using ControlInventoryManagment.DTOs.Categorie;
 using ControlInventoryManagment.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -6,10 +7,10 @@ namespace ControlInventoryManagment.ServicesContract.Repos
 {
     public interface ICategorieRepository
     {
-        Task<IEnumerable<Categorie>> GetAllCategories();
-        Task<Categorie> GetCategorieById(int id);
-        Task<Categorie> CreateCategorie(Categorie newCategorie);
-        Task UpdateCategorie(Categorie updatedCategorie);
-        Task DeleteCategorie(Categorie categorie);
+        Task<CategorieReadDTO> GetCategorieById(int id);
+        Task<CategorieReadDTO> GetCategorieByName(string name);
+        Task<CategorieReadDTO> CreateCategorie(CategorieCreateDTO newCategorie);
+        Task UpdateCategorie(CategorieUpdateDTO updatedCategorie);
+        Task DeleteCategorie(CategorieReadDTO categorie);
     }
 }

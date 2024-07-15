@@ -10,9 +10,9 @@ namespace ControlInventoryManagment.Controllers
     [ApiController]
     public class TypeEtagesController : ControllerBase
     {
-        private readonly ITypeEtagenRepository _typeEtageRepository;
+        private readonly ITypeEtageRepository _typeEtageRepository;
 
-        public TypeEtagesController(ITypeEtagenRepository typeEtageRepository)
+        public TypeEtagesController(ITypeEtageRepository typeEtageRepository)
         {
             _typeEtageRepository = typeEtageRepository;
         }
