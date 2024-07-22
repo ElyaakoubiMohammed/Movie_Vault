@@ -1,30 +1,41 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:soremar_inventory/main.dart';
+import 'package:soremar_inventory/screens/NFCUnavailablepage.dart';
+import 'package:soremar_inventory/screens/home_page.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const App());
+  testWidgets('Initial route test', (WidgetTester tester) async {
+    // Mock NFC availability
+    bool nfcAvailable = false; // Assume NFC is not available initially
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Wrap the app initialization in an async closure
+    await tester.runAsync(() async {
+      // Use a Future.delayed to simulate asynchronous NFC availability check
+      Future.delayed(Duration.zero, () async {
+        // Simulate NFC being available or not based on a condition
+        nfcAvailable = await someConditionToCheckNFC();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+        // Build our app and trigger a frame.
+        await tester.pumpWidget(MyApp(nfcAvailable: nfcAvailable));
+      });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      // Wait for the next frame after pumpWidget
+      await tester.pump();
+
+      // Verify that the correct initial route is shown
+      if (nfcAvailable) {
+        expect(find.byType(HomePage), findsOneWidget);
+        expect(find.byType(ErrorPage), findsNothing);
+      } else {
+        expect(find.byType(HomePage), findsNothing);
+        expect(find.byType(ErrorPage), findsOneWidget);
+      }
+    });
   });
+}
+
+// Simulate an asynchronous NFC availability check
+Future<bool> someConditionToCheckNFC() async {
+  // Simulate a condition where NFC is available or not
+  return Future.value(true); // Replace with actual logic to check NFC
 }

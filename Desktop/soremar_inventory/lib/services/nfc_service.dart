@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:flutter/material.dart';
-import 'dart:typed_data'; // Add this import statement
+import 'dart:typed_data';
 
 class NfcService {
   Future<List<String>> readNfcTag(BuildContext context) async {
