@@ -33,13 +33,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.deepPurple,
       ),
       routes: {
-        LoginPage.path: (context) => LoginPage(),
+        LoginPage.path: (context) => const LoginPage(),
         HomePage.path: (context) => const HomePage(),
         FormulairePage.path: (context) => const FormulairePage(),
         ErrorPage.path: (context) => const ErrorPage(
               errorMessage: 'NFC is not available on this device ',
             ),
-        ProfilePage1.path: (context) => ProfilePage1()
+        ProfilePage1.path: (context) => const ProfilePage1()
       },
     );
   }

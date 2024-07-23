@@ -9,7 +9,6 @@ class NfcService {
 
     NfcManager.instance.startSession(
       onDiscovered: (NfcTag tag) async {
-        print('NFC tag discovered');
         List<String> payloads = [];
 
         if (tag.data['ndef'] != null) {
@@ -19,17 +18,14 @@ class NfcService {
             for (var record in ndef.cachedMessage!.records) {
               String payload = _decodePayload(record.payload);
               payloads.add(payload);
-              print("Read NFC tag record: $payload");
             }
             NfcManager.instance.stopSession();
             completer.complete(payloads);
           } else {
-            print("No NDEF records found on the tag");
             NfcManager.instance.stopSession();
             completer.completeError('No NDEF records found on the tag');
           }
         } else if (tag.data['id'] != null) {
-          print('Detected an NFC-A or NFC-B tag');
           payloads
               .add('Detected NFC-A or NFC-B tag with ID: ${tag.data['id']}');
           NfcManager.instance.stopSession();
@@ -58,17 +54,14 @@ class NfcService {
 
     NfcManager.instance.startSession(
       onDiscovered: (NfcTag tag) async {
-        print('NFC tag discovered');
         var ndef = Ndef.from(tag);
         if (ndef == null) {
-          print('The detected tag is not NDEF formatted');
           NfcManager.instance.stopSession(
               errorMessage: "The detected tag is not NDEF formatted");
           completer.completeError('The detected tag is not NDEF formatted');
           return;
         }
         if (!ndef.isWritable) {
-          print('The detected tag is not writable');
           NfcManager.instance
               .stopSession(errorMessage: "The detected tag is not writable");
           completer.completeError('The detected tag is not writable');
@@ -81,11 +74,9 @@ class NfcService {
 
         try {
           await ndef.write(message);
-          print("Successfully written to NFC tag");
           NfcManager.instance.stopSession();
           completer.complete();
         } catch (e) {
-          print("Failed to write to NFC tag. Please try again.");
           NfcManager.instance.stopSession(
               errorMessage: "Failed to write to NFC tag. Please try again.");
           completer

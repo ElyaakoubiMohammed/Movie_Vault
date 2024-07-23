@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+
 class MyTextField extends StatelessWidget {
   const MyTextField({
-    Key? key,
+    super.key,
     required this.fieldName,
     required this.myController,
     this.myIcon = Icons.verified_user_outlined,
     this.prefixIconColor = Colors.blueAccent,
-  }) : super(key: key);
+  });
 
   final TextEditingController myController;
   final String fieldName;
@@ -21,10 +22,14 @@ class MyTextField extends StatelessWidget {
         labelText: fieldName,
         prefixIcon: Icon(myIcon, color: prefixIconColor),
         border: const OutlineInputBorder(),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color.fromARGB(255, 17, 17, 17),),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 17, 17, 17),
+          ),
         ),
-        labelStyle: const TextStyle(color: Color.fromARGB(255, 17, 17, 17),),
+        labelStyle: const TextStyle(
+          color: Color.fromARGB(255, 17, 17, 17),
+        ),
       ),
     );
   }

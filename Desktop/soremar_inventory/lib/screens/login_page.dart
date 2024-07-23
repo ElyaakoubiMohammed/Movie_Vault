@@ -6,21 +6,25 @@ import 'home_page.dart'; // Make sure to import the HomePage
 class LoginPage extends StatelessWidget {
   static const String path = '/login';
 
+  const LoginPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: Size(750, 1334),
-      builder: (context, child) => MyHomePage(),
+      designSize: const Size(750, 1334),
+      builder: (context, child) => const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   bool _isSelected = false;
 
   void _radio() {
@@ -32,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget radioButton(bool isSelected) => Container(
         width: 16.0,
         height: 16.0,
-        padding: EdgeInsets.all(2.0),
+        padding: const EdgeInsets.all(2.0),
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(width: 2.0, color: Colors.black)),
@@ -40,8 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ? Container(
                 width: double.infinity,
                 height: double.infinity,
-                decoration:
-                    BoxDecoration(shape: BoxShape.circle, color: Colors.black),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.black),
               )
             : Container(),
       );
@@ -58,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: 20.0),
+                padding: const EdgeInsets.only(top: 20.0),
                 child: Image.asset("assets/images/maritine.jpg"),
               ),
               Expanded(
@@ -68,7 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 60.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 28.0, vertical: 60.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -92,19 +97,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                   SizedBox(height: 100.h),
-                  FormCard(),
+                  const FormCard(),
                   SizedBox(height: 40.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          SizedBox(width: 12.0),
+                          const SizedBox(width: 12.0),
                           GestureDetector(
                             onTap: _radio,
                             child: radioButton(_isSelected),
                           ),
-                          SizedBox(width: 8.0),
+                          const SizedBox(width: 8.0),
                           Text(
                             "Remember me",
                             style: TextStyle(
@@ -119,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: 330.w,
                           height: 100.h,
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
+                            gradient: const LinearGradient(
                               colors: [
                                 Color(0xFF17ead9),
                                 Color(0xFF6078ea),
@@ -128,8 +133,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             borderRadius: BorderRadius.circular(6.0),
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xFF6078ea).withOpacity(.3),
-                                offset: Offset(0.0, 8.0),
+                                color: const Color(0xFF6078ea).withOpacity(.3),
+                                offset: const Offset(0.0, 8.0),
                                 blurRadius: 8.0,
                               ),
                             ],

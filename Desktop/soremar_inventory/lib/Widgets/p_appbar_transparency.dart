@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PAppBarTransparency extends StatelessWidget {
   final Widget child;
 
-  const PAppBarTransparency({required this.child});
+  const PAppBarTransparency({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class Details extends StatelessWidget {
   Details(
-      {Key? key, required this.productName, required this.productDescription})
-      : super(key: key);
+      {super.key, required this.productName, required this.productDescription});
 
   String productName, productDescription;
 

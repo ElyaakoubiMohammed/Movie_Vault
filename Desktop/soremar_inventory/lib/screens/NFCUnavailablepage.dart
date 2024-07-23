@@ -4,7 +4,7 @@ import 'package:app_settings/app_settings.dart';
 class ErrorPage extends StatelessWidget {
   final String errorMessage;
 
-  const ErrorPage({Key? key, required this.errorMessage}) : super(key: key);
+  const ErrorPage({super.key, required this.errorMessage});
 
   static const String path = '/error';
 

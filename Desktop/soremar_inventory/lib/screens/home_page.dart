@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:animations/animations.dart'; // Ensure this package is included
-import '../services/nfc_service.dart';
+import 'package:animations/animations.dart';
+//import '../services/nfc_service.dart';
+import 'Formulaire_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -8,12 +9,12 @@ class HomePage extends StatefulWidget {
   static const path = "/home";
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
+class HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  final NfcService _nfcService = NfcService();
+  //final NfcService _nfcService = NfcService();
   late AnimationController _animationController;
 
   @override
@@ -31,6 +32,7 @@ class _HomePageState extends State<HomePage>
     super.dispose();
   }
 
+/*
   void _onReadNFC(BuildContext context) {
     showDialog(
       context: context,
@@ -148,6 +150,13 @@ class _HomePageState extends State<HomePage>
       ),
     );
   }
+  */
+  void _navigateToFormulairePage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const FormulairePage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -196,8 +205,9 @@ class _HomePageState extends State<HomePage>
                                 curve: Curves.easeInOut,
                                 padding: const EdgeInsets.all(35),
                                 decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 255, 255, 255)
-                                      .withOpacity(0.8),
+                                  color:
+                                      const Color.fromARGB(255, 255, 255, 255)
+                                          .withOpacity(0.8),
                                   borderRadius: BorderRadius.circular(12),
                                   boxShadow: const [
                                     BoxShadow(
@@ -213,7 +223,7 @@ class _HomePageState extends State<HomePage>
                                         height: 80),
                                     const SizedBox(height: 8),
                                     const Text(
-                                      'Read Tag',
+                                      'Controlle des produits',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
@@ -224,50 +234,43 @@ class _HomePageState extends State<HomePage>
                               ),
                             ),
                             openBuilder: (context, closeContainer) =>
-                                const Center(child: Text('Reading NFC...')),
+                                const Center(
+                                    child: Text('Veuillez scannez la tag...')),
                           ),
                         ),
                         const SizedBox(height: 150), // Increased space
                         Center(
-                          child: OpenContainer(
-                            closedBuilder: (context, openContainer) =>
-                                GestureDetector(
-                              onTap: openContainer,
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut,
-                                padding: const EdgeInsets.all(35),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.8),
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 10,
-                                      offset: Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  children: [
-                                    Image.asset('assets/images/editing.gif',
-                                        height: 80),
-                                    const SizedBox(height: 8),
-                                    const Text(
-                                      'Write Tag',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          child: GestureDetector(
+                            onTap: () => _navigateToFormulairePage(context),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                              padding: const EdgeInsets.all(35),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
                               ),
-                            ),
-                            openBuilder: (context, closeContainer) => Container(
-                              // Customize your animation here
-                              child:
-                                  const Center(child: Text('Writing NFC...')),
+                              child: Column(
+                                children: [
+                                  Image.asset('assets/images/editing.gif',
+                                      height: 80),
+                                  const SizedBox(height: 8),
+                                  const Text(
+                                    'Enregistrer un produit',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
