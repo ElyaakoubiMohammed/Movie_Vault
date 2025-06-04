@@ -43,6 +43,7 @@
 ## 🚀 Live Demo
 
 Try the app right now in your browser: [Click here](https://spiffy-sunflower-17637f.netlify.app/).
+
 No installation needed — just click and explore!
 
 ---
