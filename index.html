@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Movie Vault</title>
+    <link rel="icon" href="src/movie.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/new_features.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="title">The Movie Vault</h1>
+        <div class="controls">
+            <!-- Language Dropdown -->
+            <select id="language" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="es">Español</option>
+                <option value="ar">العربية</option>
+            </select>
+
+            <!-- Category Dropdown -->
+            <select id="category">
+                <option value="">Select a category</option>
+                <option value="action">Action</option>
+                <option value="comedy">Comedy</option>
+                <option value="drama">Drama</option>
+                <option value="horror">Horror</option>
+                <option value="sci-fi">Sci-Fi</option>
+                <option value="romance">Romance</option>
+                <option value="thriller">Thriller</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="animation">Animation</option>
+                <option value="documentary">Documentary</option>
+            </select>
+
+            <input type="number" id="year" placeholder="Enter release year (e.g., 2020)">
+            <button onclick="showRecommendations()" id="getRecommendationsBtn">Get Recommendations</button>
+            <input type="text" id="searchInput" placeholder="🔍 Search by title..." oninput="searchMovies()">
+
+            <div class="loader" id="loader">Loading...</div>
+        </div>
+
+        <ul id="recommendations" class="recommendations"></ul>
+
+        <h2 id="favoritesTitle">Your Favorite Movies</h2>
+        <ul id="favoritesList" class="recommendations"></ul>
+    </div>
+
+    <!-- Modal -->
+    <div id="movieModal" class="modal">
+        <div class="modal-content">
+            <span onclick="closeModal()" class="close">&times;</span>
+            <img id="modalPoster" src="" alt="">
+            <h2 id="modalTitle"></h2>
+            <p><strong id="modalRatingLabel">Rating:</strong> <span id="modalRating"></span></p>
+            <p><strong id="modalYearLabel">Year:</strong> <span id="modalYear"></span></p>
+            <p><strong id="modalOverviewLabel">Overview:</strong> <span id="modalOverview"></span></p>
+            <div class="user-rating">
+                <label>Rate this movie:</label>
+                <div id="ratingStars" data-rating="0"></div>
+            </div>
+            <div class="comments-section">
+                <h4>Comments</h4>
+                <textarea id="commentInput" placeholder="Write a comment..."></textarea>
+                <button onclick="addComment()">Add Comment</button>
+                <ul id="commentList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/new_features.js"></script>
+
+
+</body>
+
+</html>
