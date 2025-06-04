@@ -27,7 +27,7 @@
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/ElyaakoubiMohammed/movie-vault.git
+   git clone https://github.com/ElyaakoubiMohammed/Movie_Vault.git
    ```
 
 2. **Open the App**
