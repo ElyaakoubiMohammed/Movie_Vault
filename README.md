@@ -37,6 +37,14 @@
 3. **Search and Enjoy**
    Select your desired language, year, and genre — the movies will update automatically.
 
+
+---
+
+## 🚀 Live Demo
+
+Try the app right now in your browser: [Click here](https://spiffy-sunflower-17637f.netlify.app/).
+No installation needed — just click and explore!
+
 ---
 
 ## 🛠 Tech Used
