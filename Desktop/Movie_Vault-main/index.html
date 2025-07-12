@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Movie Vault</title>
+    <link rel="icon" href="src/movie.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/new_features.css">
+    <link rel="stylesheet" href="css/advanced-features.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-content">
+            <div class="nav-logo">🎬 Movie Vault</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#discover" class="nav-link">Discover</a></li>
+                <li><a href="#trending" class="nav-link">Trending</a></li>
+                <li><a href="#collections" class="nav-link">Collections</a></li>
+                <li><a href="#favorites" class="nav-link">My List</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span id="themeIcon">🌙</span>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="floating-element">🎬</div>
+        <div class="floating-element">🍿</div>
+        <div class="floating-element">⭐</div>
+
+        <div class="hero-content">
+            <h1 class="hero-title" id="heroTitle">The Movie Vault</h1>
+            <p class="hero-subtitle" id="heroSubtitle">Discover, explore, and experience the world's greatest cinema</p>
+            <div class="hero-cta">
+                <button class="cta-button cta-primary" onclick="scrollToSection('discover')">
+                    <span>🚀</span> Start Exploring
+                </button>
+                <button class="cta-button cta-secondary" onclick="scrollToSection('trending')">
+                    <span>🔥</span> What's Trending
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Trending Section -->
+        <section class="section trending-section" id="trending">
+            <h2 class="section-title" id="trendingTitle">🔥 Trending Now</h2>
+            <div class="trending-carousel">
+                <div class="trending-track" id="trendingTrack">
+                    <!-- Trending movies will be populated here -->
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-btn" onclick="moveTrendingCarousel(-1)">‹</button>
+                <button class="carousel-btn" onclick="moveTrendingCarousel(1)">›</button>
+            </div>
+        </section>
+
+        <!-- Genre Pills -->
+        <section class="section">
+            <div class="genre-pills" id="genrePills">
+                <div class="genre-pill active" data-genre="">All</div>
+                <div class="genre-pill" data-genre="action">🎬 Action</div>
+                <div class="genre-pill" data-genre="comedy">😂 Comedy</div>
+                <div class="genre-pill" data-genre="drama">🎭 Drama</div>
+                <div class="genre-pill" data-genre="horror">👻 Horror</div>
+                <div class="genre-pill" data-genre="sci-fi">🚀 Sci-Fi</div>
+                <div class="genre-pill" data-genre="romance">💕 Romance</div>
+                <div class="genre-pill" data-genre="thriller">🔥 Thriller</div>
+                <div class="genre-pill" data-genre="fantasy">🧙 Fantasy</div>
+                <div class="genre-pill" data-genre="animation">🎨 Animation</div>
+            </div>
+        </section>
+
+        <!-- Advanced Search & Filters -->
+        <section class="section advanced-search" id="discover">
+            <h2 class="section-title" id="discoverTitle">🔍 Discover Movies</h2>
+
+            <!-- Language Selector -->
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label class="control-label" id="languageLabel">Language</label>
+                    <select id="language" onchange="changeLanguage()">
+                        <option value="en">🇺🇸 English</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="ar">🇸🇦 العربية</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" id="categoryLabel">Genre</label>
+                    <select id="category">
+                        <option value="">Select a category</option>
+                        <option value="action">🎬 Action</option>
+                        <option value="comedy">😂 Comedy</option>
+                        <option value="drama">🎭 Drama</option>
+                        <option value="horror">👻 Horror</option>
+                        <option value="sci-fi">🚀 Sci-Fi</option>
+                        <option value="romance">💕 Romance</option>
+                        <option value="thriller">🔥 Thriller</option>
+                        <option value="fantasy">🧙 Fantasy</option>
+                        <option value="animation">🎨 Animation</option>
+                        <option value="documentary">📚 Documentary</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" id="yearLabel">Release Year</label>
+                    <input type="number" id="year" placeholder="Enter release year (e.g., 2020)" min="1900" max="2025">
+                </div>
+            </div>
+
+            <!-- Advanced Filters -->
+            <div class="search-filters">
+
+
+
+                <div class="control-group">
+                    <label class="control-label">Sort By</label>
+                    <select id="sortBy">
+                        <option value="popularity.desc">Popularity</option>
+                        <option value="vote_average.desc">Rating</option>
+                        <option value="release_date.desc">Release Date</option>
+                        <option value="revenue.desc">Box Office</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="control-group search-container">
+                <label class="control-label" id="searchLabel">Search Movies</label>
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search by title, actor, director..."
+                    oninput="searchMovies()">
+            </div>
+
+            <button onclick="showRecommendations()" id="getRecommendationsBtn" class="btn-primary">
+                <span>🎬</span> <span id="getRecommendationsText">Discover Movies</span>
+            </button>
+
+            <div class="loader" id="loader">
+                <div class="loader-spinner"></div>
+                <div class="loader-text" id="loadingText">Loading amazing movies...</div>
+            </div>
+        </section>
+
+        <!-- Stats Dashboard -->
+        <section class="section">
+            <div class="stats-bar">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalMovies">0</span>
+                    <span class="stat-label" id="totalMoviesLabel">Movies Found</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="favoritesCount">0</span>
+                    <span class="stat-label" id="favoritesCountLabel">In My List</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="avgRating">0.0</span>
+                    <span class="stat-label" id="avgRatingLabel">Avg Rating</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="watchTime">0h</span>
+                    <span class="stat-label">Watch Time</span>
+                </div>
+            </div>
+        </section>
+        <section class="section movies-section">
+            <h2 class="section-title" id="moviesTitle">🎬 Discover Movies</h2>
+            <ul id="recommendations" class="recommendations"></ul>
+        </section>
+
+        <!-- Movie Recommendations Engine -->
+
+
+        <!-- Interactive Features -->
+        <section class="section interactive-section">
+            <h2 class="section-title">🎮 Interactive Features</h2>
+
+            <div class="feature-tabs">
+                <button class="tab-button" onclick="switchTab('compare')">Compare Movies</button>
+                <button class="tab-button" onclick="switchTab('timeline')">Movie Timeline</button>
+                <button class="tab-button" onclick="switchTab('social')">Community</button>
+            </div>
+
+            <!-- Movie Quiz Tab -->
+
+
+            <!-- Movie Comparison Tab -->
+            <div class="tab-content" id="compare">
+                <div class="comparison-grid">
+                    <div class="comparison-movie" onclick="selectMovieForComparison(1)">
+                        <img class="comparison-poster" id="compareMovie1Poster" src="src/movie2.png"
+                            alt="Select Movie 1"
+                            style="width:150px; height:auto; object-fit:contain; border-radius:6px; display:block; margin:0 auto;">
+
+                        <h4 id="compareMovie1Title">Select First Movie</h4>
+                        <div id="compareMovie1Stats">Click to choose a movie</div>
+                    </div>
+                    <div class="comparison-vs">VS</div>
+                    <div class="comparison-movie" onclick="selectMovieForComparison(2)">
+                        <img class="comparison-poster" id="compareMovie2Poster" src="src/clapperboard.png"
+                            alt="Select Movie 2"
+                            style="width:150px; height:auto; object-fit:contain; border-radius:6px; display:block; margin:0 auto;">
+
+                        <h4 id="compareMovie2Title">Select Second Movie</h4>
+                        <div id="compareMovie2Stats">Click to choose a movie</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movie Timeline Tab -->
+            <div class="tab-content" id="timeline">
+                <div class="timeline" id="movieTimeline">
+                    <!-- Timeline items will be populated here -->
+                </div>
+            </div>
+
+            <!-- Social/Community Tab -->
+            <div class="tab-content" id="social">
+                <div class="social-feed" id="socialFeed">
+                    <!-- Social posts will be populated here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Movie Collections -->
+
+
+        <!-- Movies Grid -->
+
+        <!-- Favorites Section -->
+        <section class="section" id="favorites">
+            <div class="favorites-header">
+                <h2 class="favorites-title" id="favoritesTitle">
+                    <span>⭐</span> <span id="favoritesText">My Favorite Movies</span>
+                </h2>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span class="favorites-count" id="favoritesDisplayCount">0</span>
+                    <button onclick="clearAllFavorites()" class="clear-favorites-btn" id="clearFavoritesBtn">
+                        Clear All
+                    </button>
+                </div>
+            </div>
+            <ul id="favoritesList" class="recommendations"></ul>
+        </section>
+    </main>
+
+    <!-- Enhanced Modal -->
+    <div id="movieModal" class="modal">
+        <div class="modal-content">
+            <button onclick="closeModal()" class="close">&times;</button>
+
+            <div class="modal-header">
+                <img id="modalBackdrop" class="modal-backdrop" src="" alt="">
+                <div class="modal-poster-container">
+                    <img id="modalPoster" src="" alt="">
+                </div>
+                <div class="modal-info">
+                    <h2 id="modalTitle"></h2>
+                    <div class="modal-meta">
+                        <span class="meta-badge" id="modalRating"></span>
+                        <span class="meta-badge" id="modalYear"></span>
+                        <span class="meta-badge" id="modalLanguage"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3><span class="section-icon">📖</span><span id="modalOverviewLabel">Overview</span></h3>
+                    <p id="modalOverview"></p>
+                </div>
+
+                <div class="modal-section">
+                    <div class="user-rating">
+                        <h3><span class="section-icon">⭐</span><span id="rateMovieLabel">Rate this movie</span></h3>
+                        <div class="rating-container">
+                            <div class="rating-stars" id="ratingStars" data-rating="0"></div>
+                            <span class="rating-label" id="ratingLabel">Click to rate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <div class="comments-section">
+                        <h3><span class="section-icon">💬</span><span id="commentsLabel">Comments</span></h3>
+                        <textarea id="commentInput" placeholder="Share your thoughts about this movie..."></textarea>
+                        <div class="comment-actions">
+                            <button onclick="addComment()" class="add-comment-btn" id="addCommentBtn">Add
+                                Comment</button>
+                            <span class="comment-count" id="commentCount">0 comments</span>
+                        </div>
+                        <ul id="commentList"></ul>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button onclick="toggleFavorite()" class="action-btn btn-favorite" id="favoriteBtn">
+                        <span>❤️</span> Add to Favorites
+                    </button>
+                    <button onclick="addToWatchlist()" class="action-btn btn-watchlist" id="watchlistBtn">
+                        <span>📋</span> Add to Watchlist
+                    </button>
+                    <button onclick="shareMovie()" class="action-btn btn-share" id="shareBtn">
+                        <span>📤</span> Share Movie
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/new_features.js"></script>
+    <script src="js/advanced-features.js"></script>
+</body>
+
+</html>
