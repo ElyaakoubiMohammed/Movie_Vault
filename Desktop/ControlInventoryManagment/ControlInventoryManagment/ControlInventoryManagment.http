@@ -1,6 +1,0 @@
-@ControlInventoryManagment_HostAddress = http://localhost:5228
-
-GET {{ControlInventoryManagment_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
